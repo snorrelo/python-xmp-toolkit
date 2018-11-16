@@ -755,8 +755,12 @@ class XMPMeta(object):
         count = 0
         while True:
             try:
-                _, _ = _cexempi.get_array_item(self.xmpptr, schema_ns,
+                _, pbit = _cexempi.get_array_item(self.xmpptr, schema_ns,
                                                       array_name, count+1)
+                # for some reason I need this to prevent an endless loop.
+                # maybe pbit != 0 could have been used also.
+                if pbit == 32766: 
+                    return count
                 count += 1
             except XMPError:
                 # We've gone through the entire list. It does not exist.
